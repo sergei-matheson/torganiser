@@ -1,6 +1,6 @@
 # Torganiser
 
-TODO: Write a gem description
+Simple utility that organises media files according to filename
 
 ## Installation
 
