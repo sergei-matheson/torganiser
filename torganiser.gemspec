@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Torganiser::VERSION
   spec.authors       = [""]
   spec.email         = [""]
-  spec.summary       = %q{Organises media files according to filename.}
-  spec.description   = %q{Organises media files according to filename.}
+  spec.summary       = %q{Organises episode files according to filename.}
+  spec.description   = %q{Organises episode files according to filename.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
