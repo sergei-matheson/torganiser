@@ -3,7 +3,12 @@ module Torganiser
 
     attr_reader :file
 
-    @@episode_info_matcher = /^(?<series_info>.+)\.s(?<season>\d+)e(?<episode>\d+)\..*$/i
+    @@episode_info_matcher = %r{^
+      (?<series>.+)    # Series name, and possibly year
+      .s(?<season>\d+) # season number
+      e(?<episode>\d+) # episode number
+      \..*$            # everything else
+    }ix
 
     @@year_matcher = /^\d{4}$/
 
@@ -24,23 +29,23 @@ module Torganiser
     end
 
     def series_name
-      @series_name ||= series_info[:name]
+      @series_name ||= series[:name]
     end
 
     def series_year
-      @series_year ||= series_info[:year]
+      @series_year ||= series[:year]
     end
 
     private
 
-    def series_info
-      @series_info ||= extract_series_info
+    def series
+      @series ||= extract_series
     end
 
-    def extract_series_info
-      parts = episode_info[:series_info].split('.')
+    def extract_series
+      parts = episode_info[:series].split('.')
       year = nil
-      if match = year_matcher.match(parts.last)
+      if match = @@year_matcher.match(parts.last)
         parts.pop
         year = match[0].to_i
       end
@@ -52,15 +57,7 @@ module Torganiser
     end
 
     def extract_episode_info
-      episode_info_matcher.match(basename)
-    end
-
-    def episode_info_matcher
-      @@episode_info_matcher
-    end
-
-    def year_matcher
-      @@year_matcher
+      @@episode_info_matcher.match(basename)
     end
 
   end
