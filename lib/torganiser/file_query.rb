@@ -1,4 +1,8 @@
 module Torganiser
+  # A file query is specified by adding allowed directories,
+  # and optionally, extensions.
+  # The 'pattern' method returns a Dir.glob style pattern
+  # that can be used to match a set of files.
   class FileQuery
 
     attr_reader :directories, :extensions

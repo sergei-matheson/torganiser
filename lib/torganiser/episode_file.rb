@@ -1,4 +1,6 @@
 module Torganiser
+  # Models a file that contains a single episode of a TV series.
+  # Attempts to extract episode data, based on the filename.
   class EpisodeFile
 
     attr_reader :file
