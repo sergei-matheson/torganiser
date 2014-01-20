@@ -19,16 +19,17 @@ module Torganiser
       end
 
       context "with a directory" do
+        subject { FileQuery.new(directories: "woot/waffle") }
 
         it "adds that directory to the list of search directories" do
-          expect(FileQuery.new("woot/waffle").directories).to eq ['woot/waffle']
+          expect(subject.directories).to eq ['woot/waffle']
         end
 
       end
 
       context "with a directory and a media extension" do
 
-        subject { FileQuery.new('mydir', 'mp4') }
+        subject { FileQuery.new(directories: 'mydir', extensions: 'mp4') }
 
         it "adds that directory to the list of search directories" do
           expect(subject.directories).to eq ['mydir']
@@ -46,13 +47,18 @@ module Torganiser
 
       let(:extensions) { nil }
 
-      let(:dirs) { 'the-dir' }
+      let(:directories) { 'the-dir' }
 
-      subject { FileQuery.new(dirs, extensions) }
+      subject do
+        FileQuery.new(
+          directories: directories,
+          extensions: extensions
+        )
+      end
 
       context "with one directory" do
 
-        let(:dirs) { "stuff" }
+        let(:directories) { "stuff" }
 
         it "includes only that directory" do
           expect(subject.pattern).to match(/^stuff\/\*\*/)
@@ -62,7 +68,7 @@ module Torganiser
 
       context "with multiple directories" do
 
-        let(:dirs) { ["one","two"] }
+        let(:directories) { ["one","two"] }
 
         it "includes all specified directories" do
           expect(subject.pattern).to match(/{one,two}\/\*\*/)

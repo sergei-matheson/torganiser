@@ -7,19 +7,19 @@ module Torganiser
 
     attr_reader :directories, :extensions
 
-    def initialize dirs = nil, extensions = nil
+    def initialize(directories: nil, extensions: nil)
       @directories = []
       @extensions = []
-      add_directory(dirs)
-      add_extension(extensions)
+      add_directory(directories) if directories
+      add_extension(extensions) if extensions
     end
 
     def add_extension extensions
       @extensions.concat([*extensions])
     end
 
-    def add_directory dirs
-      @directories.concat([*dirs])
+    def add_directory directories
+      @directories.concat([*directories])
     end
 
     def pattern
