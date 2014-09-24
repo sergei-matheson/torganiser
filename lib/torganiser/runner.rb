@@ -3,9 +3,9 @@ module Torganiser
   # files and extensions
   class Runner
 
-    def initialize(collection, files:, extensions: [])
+    def initialize(collection, files:, extensions: [], dry_run: false)
       @scanner = Scanner.new(files, extensions)
-      @arranger = Arranger.new(collection)
+      @arranger = Arranger.new(collection, dry_run: dry_run)
     end
 
     def run

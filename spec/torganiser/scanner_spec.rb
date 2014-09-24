@@ -24,7 +24,9 @@ module Torganiser
         )
       end
 
-      let(:query_results) { ["/tmp/dir1/file3", "/tmp/dir2/file4"] }
+      let(:query_results) do
+        ["/tmp/dir1", "/tmp/dir1/file3", "/tmp/dir2", "/tmp/dir2/file4"]
+      end
 
       before do
         allow(File).to receive(:file?) { |path| path.match(/file/) }

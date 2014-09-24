@@ -10,7 +10,12 @@ module Torganiser
       let(:files) { double("files") }
       let(:extensions) { double("extensions") }
 
-      subject { Runner.new(collection, files: files, extensions: extensions) }
+      subject do
+        Runner.new(
+          collection,
+          files: files, extensions: extensions, dry_run: true
+        )
+      end
 
       let(:scanner) do
         instance_double("Torganiser::Scanner", each: nil)
@@ -52,8 +57,8 @@ module Torganiser
             allow(Arranger).to receive(:new).and_return arranger
           end
 
-          it "is created for the collection" do
-            expect(Arranger).to receive(:new).with(collection)
+          it "is created for the collection, and dry run status" do
+            expect(Arranger).to receive(:new).with(collection, dry_run: true)
             subject.run
           end
 

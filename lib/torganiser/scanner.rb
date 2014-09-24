@@ -16,7 +16,7 @@ module Torganiser
       end
       unless file_query.empty?
         Dir[file_query.pattern].each do |file|
-          yield file
+          yield file if File.file?(file)
         end
       end
     end
@@ -41,7 +41,7 @@ module Torganiser
     end
 
     def file_query
-      @file_query || FileQuery.new
+      @file_query ||= FileQuery.new
     end
 
   end
