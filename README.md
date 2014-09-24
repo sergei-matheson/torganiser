@@ -2,6 +2,9 @@
 
 Simple utility that organises media files according to filename
 
+
+[![Build Status](https://travis-ci.org/sergei-matheson/torganiser.svg?branch=master)](https://travis-ci.org/sergei-matheson/torganiser)
+
 ## Installation
 
 Add this line to your application's Gemfile:
