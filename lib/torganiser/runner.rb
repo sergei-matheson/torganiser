@@ -5,7 +5,7 @@ module Torganiser
 
     attr_reader :directories, :extensions
 
-    def initialize(directories)
+    def initialize(collection, files: files, extensions: extensions)
       FileQuery.new(directories: directories)
     end
 

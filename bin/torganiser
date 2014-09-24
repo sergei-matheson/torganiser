@@ -1,3 +1,25 @@
 #!/usr/bin/env ruby
 
 require 'torganiser'
+
+Clamp do
+
+  option ["--version", "-v"], :flag, "Show version" do
+    puts Torganiser::VERSION
+    exit(0)
+  end
+
+  option ["--collection", "-c"], "DIRECTORY",
+    "Root of the collection into which to organise the files",
+    environment_variable: "TORGANISER_COLLECTION",
+    required: true
+
+  option ["--extension", "-e"], "EXTENSION", "Extension to include eg. mp4. May be specifed multiple times", multivalued: true, attribute_name: :extensions
+
+  parameter "FILES ...", "Files or directories to organise", attribute_name: :files
+
+  def execute
+    #Torganiser::Runner.new(collection, files: files, extensions: extensions).execute
+  end
+
+end
