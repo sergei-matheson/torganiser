@@ -12,9 +12,8 @@ module Torganiser
 
       subject { Runner.new(collection, files: files, extensions: extensions) }
 
-      let(:episode_files) { [] }
       let(:scanner) do
-        instance_double("Torganiser::Scanner", episode_files: episode_files)
+        instance_double("Torganiser::Scanner", each: nil)
       end
 
       before do
@@ -29,7 +28,7 @@ module Torganiser
         end
 
         it "is used to retrieve episode files" do
-          expect(scanner).to receive(:episode_files)
+          expect(scanner).to receive(:each)
           subject.run
         end
 
@@ -39,7 +38,9 @@ module Torganiser
 
         let(:episode_file) { instance_double("Torganiser::EpisodeFile") }
 
-        let(:episode_files) { [episode_file] }
+        before do
+          allow(scanner).to receive(:each).and_yield episode_file
+        end
 
         describe "an arranger" do
 

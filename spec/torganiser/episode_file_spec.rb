@@ -22,16 +22,22 @@ module Torganiser
         expect(subject.episode).to eq 1
       end
 
-      it 'extracts series name' do
-        expect(subject.series_name).to eq "Hello"
+      it 'creates a series with a name and no year' do
+        expect(Series).to receive(:new).with(
+          name: "Hello", year: nil
+        )
+        subject.series
       end
 
       context "that contains year information" do
 
         let(:file) { "file/path/Hello.2008.S02E01.mp4"}
 
-        it 'extracts series year' do
-          expect(subject.series_year).to eq 2008
+        it 'creates a series with a name and year' do
+          expect(Series).to receive(:new).with(
+            name: "Hello", year: 2008
+          )
+          subject.series
         end
 
       end
@@ -40,8 +46,11 @@ module Torganiser
 
         let(:file) { "file/path/Goodbye.Hello.Hamburger.2008.S02E01.mp4"}
 
-        it 'extracts the name with spaces' do
-          expect(subject.series_name).to eq "Goodbye Hello Hamburger"
+        it 'creates a series with a name with spaces' do
+          expect(Series).to receive(:new).with hash_including(
+            name: "Goodbye Hello Hamburger"
+          )
+          subject.series
         end
 
       end

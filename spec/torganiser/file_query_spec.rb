@@ -16,10 +16,18 @@ module Torganiser
           expect(subject.extensions).to be_empty
         end
 
+        it "is empty" do
+          expect(subject).to be_empty
+        end
+
       end
 
       context "with a directory" do
         subject { FileQuery.new(directories: "woot/waffle") }
+
+        it "is not empty" do
+          expect(subject).not_to be_empty
+        end
 
         it "adds that directory to the list of search directories" do
           expect(subject.directories).to eq ['woot/waffle']

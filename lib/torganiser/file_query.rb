@@ -14,6 +14,10 @@ module Torganiser
       add_extension(extensions) if extensions
     end
 
+    def empty?
+      @directories.empty?
+    end
+
     def add_extension extensions
       @extensions.concat([*extensions])
     end

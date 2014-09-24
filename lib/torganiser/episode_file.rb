@@ -5,14 +5,14 @@ module Torganiser
 
     attr_reader :file
 
-    @episode_info_matcher = %r{^
+    EPISODE_INFO_MATCHER = %r{^
       (?<series>.+)    # Series name, and possibly year
       .s(?<season>\d+) # season number
       e(?<episode>\d+) # episode number
       \..*$            # everything else
     }ix
 
-    @year_matcher = /^\d{4}$/
+    YEAR_MATCHER = /^\d{4}$/
 
     def initialize(file)
       @file = file
@@ -27,47 +27,21 @@ module Torganiser
     end
 
     def episode
-      @season ||= episode_info[:episode].to_i
+      @episode ||= episode_info[:episode].to_i
     end
 
-    def series_name
-      @series_name ||= series[:name]
-    end
-
-    def series_year
-      @series_year ||= series[:year]
+    def series
+      @series ||= begin
+        parts = episode_info[:series].split('.')
+        year = YEAR_MATCHER.match(parts.last) ? parts.pop.to_i : nil
+        Series.new( name:parts.join(' '), year:year)
+      end
     end
 
     private
 
-    def self.year_matcher
-      @year_matcher
-    end
-
-    def self.episode_info_matcher
-      @episode_info_matcher
-    end
-
-    def series
-      @series ||= extract_series
-    end
-
-    def extract_series
-      parts = episode_info[:series].split('.')
-      year = nil
-      if match = self.class.year_matcher.match(parts.last)
-        parts.pop
-        year = match[0].to_i
-      end
-      {name:parts.join(' '), year:year}
-    end
-
     def episode_info
-      @episode_info ||= extract_episode_info
-    end
-
-    def extract_episode_info
-      self.class.episode_info_matcher.match(basename)
+      @episode_info ||= EPISODE_INFO_MATCHER.match(basename)
     end
 
   end
