@@ -29,15 +29,26 @@ module Torganiser
     private
 
     def directory_pattern
-      pattern_for directories
+      ItemsPattern.new(directories).to_s
     end
 
     def extension_pattern
-      "*" + (extensions.count > 0 ? pattern_for(extensions): '')
+      "*" + (extensions.count > 0 ? ItemsPattern.new(extensions).to_s : '')
     end
 
-    def pattern_for items
-      items.count > 1 ?  "{#{items.join(',')}}" : items.first
+    # Models a pattern that matchers a series of one or more string items.
+    class ItemsPattern
+
+      attr_reader :items
+
+      def initialize items
+        @items = items
+      end
+
+      def to_s
+        items.count > 1 ?  "{#{items.join(',')}}" : items.first
+      end
+
     end
 
   end
