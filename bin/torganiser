@@ -19,7 +19,7 @@ Clamp do
   parameter "FILES ...", "Files or directories to organise", attribute_name: :files
 
   def execute
-    #Torganiser::Runner.new(collection, files: files, extensions: extensions).execute
+    Torganiser::Runner.new(collection, files: files, extensions: extensions).execute
   end
 
 end
