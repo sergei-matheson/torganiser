@@ -6,7 +6,7 @@ module Torganiser
 
     context "when initialized with a name" do
 
-      subject { Series.new(name: "Pear Tree") }
+      subject { Series.new("Pear Tree") }
 
       it 'has a display name' do
         expect(subject.display_name).to eq 'Pear Tree'
@@ -14,7 +14,7 @@ module Torganiser
 
       context "and year" do
 
-        subject { Series.new(name: "Pear Tree", year: 2009) }
+        subject { Series.new("Pear Tree", year: 2009) }
 
         it 'has a display name that includes year' do
           expect(subject.display_name).to eq 'Pear Tree (2009)'

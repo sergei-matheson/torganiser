@@ -34,7 +34,7 @@ module Torganiser
       @series ||= begin
         parts = episode_info[:series].split('.')
         year = YEAR_MATCHER.match(parts.last) ? parts.pop.to_i : nil
-        Series.new( name:parts.join(' '), year:year)
+        Series.new(parts.join(' '), year:year)
       end
     end
 

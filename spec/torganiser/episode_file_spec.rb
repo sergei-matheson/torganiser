@@ -24,7 +24,7 @@ module Torganiser
 
       it 'creates a series with a name and no year' do
         expect(Series).to receive(:new).with(
-          name: "Hello", year: nil
+          "Hello", year: nil
         )
         subject.series
       end
@@ -35,7 +35,7 @@ module Torganiser
 
         it 'creates a series with a name and year' do
           expect(Series).to receive(:new).with(
-            name: "Hello", year: 2008
+            "Hello", year: 2008
           )
           subject.series
         end
@@ -47,9 +47,7 @@ module Torganiser
         let(:file) { "file/path/Goodbye.Hello.Hamburger.2008.S02E01.mp4"}
 
         it 'creates a series with a name with spaces' do
-          expect(Series).to receive(:new).with hash_including(
-            name: "Goodbye Hello Hamburger"
-          )
+          expect(Series).to receive(:new).with "Goodbye Hello Hamburger", anything
           subject.series
         end
 

@@ -5,7 +5,7 @@ module Torganiser
 
     attr_reader :name, :year
 
-    def initialize name:, year: nil
+    def initialize name, year: nil
       @name = name
       @year = year
     end
