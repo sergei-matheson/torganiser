@@ -47,7 +47,10 @@ module Torganiser
         let(:file) { "file/path/Goodbye.Hello.Hamburger.2008.S02E01.mp4"}
 
         it 'creates a series with a name with spaces' do
-          expect(Series).to receive(:new).with "Goodbye Hello Hamburger", anything
+          expect(Series).to receive(:new).with(
+            "Goodbye Hello Hamburger",
+            anything
+          )
           subject.series
         end
 
