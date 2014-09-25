@@ -14,14 +14,21 @@ module Torganiser
       ordinary_files.each do |file|
         yield file
       end
-      unless file_query.empty?
-        Dir[file_query.pattern].each do |file|
-          yield file if File.file?(file)
-        end
+      directory_files.each do |file|
+        yield file
       end
     end
 
     private
+
+    def directory_files
+      if file_query.empty?
+        []
+      else
+        Dir[file_query.pattern].select { |file| File.file?(file) }
+      end
+    end
+
     def add_files files
       files.each do |file|
         add_file file
