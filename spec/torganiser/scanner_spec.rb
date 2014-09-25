@@ -47,10 +47,32 @@ module Torganiser
         end
 
         context "when enumerating" do
-          it "is used do a directory search" do
-            expect(Dir).to receive(:[]).with query_pattern
-            subject.each { |_| }
+
+          context "when given some directories" do
+            it "is used do a directory search" do
+              expect(Dir).to receive(:[]).with query_pattern
+              subject.each { |_| }
+            end
           end
+
+          context "when empty" do
+
+            let(:files) { ["/tmp/file1""/tmp/file2"] }
+
+            let(:file_query) do
+              instance_double(
+                "Torganiser::FileQuery",
+                add_extension: nil,
+                empty?: true
+              )
+            end
+
+            it "is not used" do
+              expect(Dir).not_to receive(:[]).with query_pattern
+              subject.each { |_| }
+            end
+          end
+
         end
       end
 
