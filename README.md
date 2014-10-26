@@ -6,6 +6,7 @@ Simple utility that organises media files according to filename
 [![Build Status](https://travis-ci.org/sergei-matheson/torganiser.svg?branch=master)](https://travis-ci.org/sergei-matheson/torganiser)
 [![Code Climate](https://codeclimate.com/github/sergei-matheson/torganiser/badges/gpa.svg)](https://codeclimate.com/github/sergei-matheson/torganiser)
 [![Test Coverage](https://codeclimate.com/github/sergei-matheson/torganiser/badges/coverage.svg)](https://codeclimate.com/github/sergei-matheson/torganiser)
+[![Gem Version](https://badge.fury.io/rb/torganiser.svg)](http://badge.fury.io/rb/torganiser)
 
 ## Installation
 
