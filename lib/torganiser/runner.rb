@@ -1,10 +1,15 @@
 module Torganiser
   # Runs the organisation process for a given array of
-  # files and extensions
+  # files, extensions, and ignored files
   class Runner
 
-    def initialize(collection, files: [], extensions: [], dry_run: false)
-      @scanner = Scanner.new(files, extensions)
+    def initialize(
+      collection, files: [], extensions: [], ignored: [], dry_run: false
+    )
+      @scanner = Scanner.new(
+        files, extensions,
+        ignored.map { |string| Regexp.new(string) }
+      )
       @arranger = Arranger.new(collection, dry_run: dry_run)
     end
 

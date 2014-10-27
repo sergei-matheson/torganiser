@@ -5,12 +5,19 @@ module Torganiser
 
     include Enumerable
 
-    def initialize(files, extensions)
+    def initialize(files, extensions, ignored)
       file_query.add_extension extensions
+      ignore ignored
       add_files files
     end
 
     def each
+      all_files { |file| yield file unless ignored? file }
+    end
+
+    private
+
+    def all_files
       ordinary_files.each do |file|
         yield file
       end
@@ -19,7 +26,18 @@ module Torganiser
       end
     end
 
-    private
+    def ignored? file
+      file = file.strip
+      @ignored_patterns.any? { |pattern| pattern.match file }
+    end
+
+    def ignore ignored
+      ignored_patterns.concat([*ignored])
+    end
+
+    def ignored_patterns
+      @ignored_patterns ||= []
+    end
 
     def directory_files
       if file_query.empty?

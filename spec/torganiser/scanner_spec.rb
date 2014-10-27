@@ -10,7 +10,9 @@ module Torganiser
 
       let(:extensions) { double("extensions") }
 
-      subject { Scanner.new(files, extensions) }
+      let(:ignored_patterns) { [] }
+
+      subject { Scanner.new(files, extensions, ignored_patterns) }
 
       let(:query_pattern) { double("query pattern") }
 
@@ -77,12 +79,34 @@ module Torganiser
       end
 
       it "enumerates the ordinary files, and files found in the directories" do
-        expect { |b| subject.each(&b) }.to yield_successive_args(
+        expect { |block| subject.each(&block) }.to yield_successive_args(
           "/tmp/file1",
           "/tmp/file2",
           "/tmp/dir1/file3",
           "/tmp/dir2/file4"
         )
+      end
+
+      context "if any files match any of the ignore patterns" do
+        let(:ignored_patterns) { [/ignoreme/, /alsoignorethis$/] }
+
+        let(:query_results) do
+          [
+            "/tmp/dir2/file5.alsoignorethis\r\n",
+            "/tmp/dir1", "/tmp/dir2/file5.ignoreme",
+            "/tmp/dir1/file3", "/tmp/dir2",
+            "/tmp/dir2/file4"
+          ]
+        end
+
+        it "does not include the ignored files" do
+          expect { |block| subject.each(&block) }.to yield_successive_args(
+            "/tmp/file1",
+            "/tmp/file2",
+            "/tmp/dir1/file3",
+            "/tmp/dir2/file4"
+          )
+        end
       end
 
 

@@ -14,14 +14,24 @@ Clamp do
     environment_variable: "TORGANISER_COLLECTION",
     required: true
 
-  option ["--extension", "-e"], "EXTENSION", "Extension to include eg. mp4. May be specifed multiple times", multivalued: true, attribute_name: :extensions
+  option ["--extension", "-e"], "EXTENSION",
+    "Extension to include eg. mp4. May be specifed multiple times",
+    multivalued: true, attribute_name: :extensions
+
+  option ["--ignore", "-i"], "PATTERN",
+    "Ignore files whose path matches pattern eg. May be specifed multiple times.",
+    multivalued: true, attribute_name: :ignore
 
   option "--dry-run", :flag, "If specified, no files will be moved"
 
-  parameter "FILES ...", "Files or directories to organise", attribute_name: :files
+  parameter "FILES ...", "Files or directories to organise",
+    attribute_name: :files
 
   def execute
-    Torganiser::Runner.new(collection, files: files, extensions: extensions, dry_run: dry_run?).run
+    Torganiser::Runner.new(collection,
+                           files: files, extensions: extensions,
+                           ignored: ignore, dry_run: dry_run?
+                          ).run
   end
 
 end

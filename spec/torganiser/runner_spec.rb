@@ -9,11 +9,13 @@ module Torganiser
       let(:collection) { double("collection") }
       let(:files) { double("files") }
       let(:extensions) { double("extensions") }
+      let(:ignored) { [] }
 
       subject do
         Runner.new(
           collection,
-          files: files, extensions: extensions, dry_run: true
+          files: files, extensions: extensions,
+          ignored: ignored, dry_run: true
         )
       end
 
@@ -27,8 +29,19 @@ module Torganiser
 
       describe "a scanner" do
 
-        it "is created for the files and extensions" do
-          expect(Scanner).to receive(:new).with(files, extensions)
+        it "is created for the files,  extensions, and ignored as regex" do
+          expect(Scanner).to receive(:new).with(
+            files, extensions, anything
+          )
+          subject.run
+        end
+
+        let(:ignored) { ["ignored", ".*stuff.*"] }
+
+        it "is given the list of files to ignore converted to regex" do
+          expect(Scanner).to receive(:new).with(
+            anything, anything, [/ignored/, /.*stuff.*/]
+          )
           subject.run
         end
 
