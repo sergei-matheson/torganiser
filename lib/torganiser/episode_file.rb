@@ -35,9 +35,6 @@ module Torganiser
     end
 
     def episode_info
-      require 'pry'
-      #binding.pry if 'Elementary.S01E23E24.HDTV.x264-LOL.mp4' == basename
-      #@episode_info ||= Matcher.match(basename) or binding.pry
       @episode_info ||= Matcher.match(basename) or raise(
         "Unable to parse #{file}"
       )
