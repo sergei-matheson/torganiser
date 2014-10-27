@@ -23,15 +23,20 @@ module Torganiser
 
     def series
       @series ||= begin
-        parts = episode_info[:name].split('.')
         year = year.to_i if year = episode_info[:year]
-        Series.new(parts.join(' '), year: year)
+        Series.new(series_name, year: year)
       end
     end
 
     private
 
+    def series_name
+      episode_info[:name].split('.').join(' ').gsub(/[^a-z]+$/i, '')
+    end
+
     def episode_info
+      require 'pry'
+      #@episode_info ||= Matcher.match(basename) or binding.pry
       @episode_info ||= Matcher.match(basename) or raise(
         "Unable to parse #{file}"
       )
@@ -40,17 +45,19 @@ module Torganiser
     # A matcher that can extract semantic information from a
     # properly named file.
     module Matcher
-      separator = '(\.|\s)'
+      separator = '(\.|\s|\s?\-\s?)'
 
       long_format = [
         's(?<season>\d+)', # season number
         'e(?<episode>\d+)' # episode number
       ].join
 
-      # season number and episode number together
-      short_format = '(?<season>\d+)(?<episode>\d{2})'
+      # season number and episode number together, optionally with an 'x'
+      short_format = '\[?(?<season>\d+)x?(?<episode>\d{2})\]?'
 
-      season_info = "(#{long_format}|#{short_format})"
+      special = 's(?<season>0)(?<episode>0)'
+
+      season_info = "(#{long_format}|#{short_format}|#{special})"
 
       # Series name, and possibly year
       series_with_year = '(?<name>.*)\.(?<year>\d{4})'

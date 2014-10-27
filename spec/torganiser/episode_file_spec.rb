@@ -67,7 +67,66 @@ module Torganiser
           expect(subject.episode).to eq 2
         end
 
+        context "with an 'x'" do
+          let(:file) { "file/path/Hello.2014.4x07.hdtv-lol.mp4" }
+
+          it 'extracts season number' do
+            expect(subject.season).to eq 4
+          end
+
+          it 'extracts episode number' do
+            expect(subject.episode).to eq 7
+          end
+
+        end
+
+        context "surrounded in square brackets" do
+          let(:file) { "file/path/Wootle [3x08] Some title here.avi" }
+
+          it 'extracts season number' do
+            expect(subject.season).to eq 3
+          end
+
+          it 'extracts episode number' do
+            expect(subject.episode).to eq 8
+          end
+
+        end
+
       end
+
+      context "that is dash-separated" do
+        let(:file) { "Wiffle's Berry - S01E12-the title.avi" }
+
+        it 'extracts series correctly' do
+          expect(Series).to receive(:new).with(
+            "Wiffle's Berry", year: nil
+          )
+          subject.series
+        end
+
+        it 'extracts season number' do
+          expect(subject.season).to eq 1
+        end
+
+        it 'extracts episode number' do
+          expect(subject.episode).to eq 12
+        end
+      end
+
+      context "that is a special" do
+        let(:file) { "file/path/Hello.2014.s00.hdtv-lol.mp4" }
+
+        it 'extracts season number as zero' do
+          expect(subject.season).to eq 0
+        end
+
+        it 'extracts episode number as zero' do
+          expect(subject.episode).to eq 0
+        end
+
+      end
+
     end
 
     context "when initialised with a file whose name cannot be parsed" do
