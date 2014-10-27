@@ -5,15 +5,6 @@ module Torganiser
 
     attr_reader :file
 
-    EPISODE_INFO_MATCHER = %r{^
-      (?<series>.+)    # Series name, and possibly year
-      .s(?<season>\d+) # season number
-      e(?<episode>\d+) # episode number
-      \..*$            # everything else
-    }ix
-
-    YEAR_MATCHER = /^\d{4}$/
-
     def initialize(file)
       @file = file
     end
@@ -32,16 +23,52 @@ module Torganiser
 
     def series
       @series ||= begin
-        parts = episode_info[:series].split('.')
-        year = YEAR_MATCHER.match(parts.last) ? parts.pop.to_i : nil
-        Series.new(parts.join(' '), year:year)
+        parts = episode_info[:name].split('.')
+        year = year.to_i if year = episode_info[:year]
+        Series.new(parts.join(' '), year: year)
       end
     end
 
     private
 
     def episode_info
-      @episode_info ||= EPISODE_INFO_MATCHER.match(basename)
+      @episode_info ||= Matcher.match(basename) or raise(
+        "Unable to parse #{file}"
+      )
+    end
+
+    # A matcher that can extract semantic information from a
+    # properly named file.
+    module Matcher
+      separator = '(\.|\s)'
+
+      long_format = [
+        's(?<season>\d+)', # season number
+        'e(?<episode>\d+)' # episode number
+      ].join
+
+      # season number and episode number together
+      short_format = '(?<season>\d+)(?<episode>\d{2})'
+
+      season_info = "(#{long_format}|#{short_format})"
+
+      # Series name, and possibly year
+      series_with_year = '(?<name>.*)\.(?<year>\d{4})'
+      series_without_year = '(?<name>.*)'
+
+      # Series without year takes precedence
+      series = "(#{series_with_year}|#{series_without_year})"
+
+      PATTERN  = %r{^
+        #{series}                  # Series name, and possibly year
+        #{separator}#{season_info} # season info
+        #{separator}.*$            # everything else
+      }ix
+
+      def self.match basename
+        PATTERN.match basename
+      end
+
     end
 
   end

@@ -4,11 +4,11 @@ module Torganiser
 
   describe EpisodeFile do
 
+    subject { EpisodeFile.new(file) }
+
     context "when initialized with an informative filename" do
 
       let(:file) { "file/path/Hello.S02E01.mp4"}
-
-      subject { EpisodeFile.new(file) }
 
       it 'extracts the base file name' do
         expect(subject.basename).to eq 'Hello.S02E01.mp4'
@@ -55,6 +55,27 @@ module Torganiser
         end
 
       end
+
+      context "in short format" do
+        let(:file) { "file/path/Hello.2014.302.hdtv-lol.mp4" }
+
+        it 'extracts season number' do
+          expect(subject.season).to eq 3
+        end
+
+        it 'extracts episode number' do
+          expect(subject.episode).to eq 2
+        end
+
+      end
+    end
+
+    context "when initialised with a file whose name cannot be parsed" do
+
+      let(:file) { "file/path/Hello.this-contains-no-information.mp4"}
+
+      it 'blows up in a more helpful manner' do
+        expect{ subject.series }.to raise_error(/Unable to parse #{file}/) end
 
     end
 

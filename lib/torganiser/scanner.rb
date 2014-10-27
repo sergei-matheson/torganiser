@@ -27,7 +27,6 @@ module Torganiser
     end
 
     def ignored? file
-      file = file.strip
       @ignored_patterns.any? { |pattern| pattern.match file }
     end
 

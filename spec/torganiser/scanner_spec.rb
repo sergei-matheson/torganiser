@@ -92,7 +92,7 @@ module Torganiser
 
         let(:query_results) do
           [
-            "/tmp/dir2/file5.alsoignorethis\r\n",
+            "/tmp/dir2/file5.alsoignorethis",
             "/tmp/dir1", "/tmp/dir2/file5.ignoreme",
             "/tmp/dir1/file3", "/tmp/dir2",
             "/tmp/dir2/file4"
