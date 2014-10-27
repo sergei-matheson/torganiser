@@ -36,6 +36,7 @@ module Torganiser
 
     def episode_info
       require 'pry'
+      #binding.pry if 'Elementary.S01E23E24.HDTV.x264-LOL.mp4' == basename
       #@episode_info ||= Matcher.match(basename) or binding.pry
       @episode_info ||= Matcher.match(basename) or raise(
         "Unable to parse #{file}"
@@ -49,13 +50,15 @@ module Torganiser
 
       long_format = [
         's(?<season>\d+)', # season number
-        'e(?<episode>\d+)' # episode number
-      ].join
+        'e(?<episode>\d+)', # episode number
+        '(e\d+)?' # optional second episode number, ignored
+      ].join('\s?') # optionally space separated
 
       # season number and episode number together, optionally with an 'x'
       short_format = '\[?(?<season>\d+)x?(?<episode>\d{2})\]?'
 
-      special = 's(?<season>0)(?<episode>0)'
+      # specials don't fit nicely into the season/episode model.
+      special = "s(?<season>0)(?<episode>0)|s(?<season>\\d+)#{separator}special"
 
       season_info = "(#{long_format}|#{short_format}|#{special})"
 
@@ -69,7 +72,7 @@ module Torganiser
       PATTERN  = %r{^
         #{series}                  # Series name, and possibly year
         #{separator}#{season_info} # season info
-        #{separator}.*$            # everything else
+        #{separator}.*$            # stuff we don't care about
       }ix
 
       def self.match basename

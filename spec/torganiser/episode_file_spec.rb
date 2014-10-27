@@ -42,6 +42,21 @@ module Torganiser
 
       end
 
+      context "that is a double episode" do
+
+        let(:file) { "file/path/Hello.2008.S02E01E02.mp4"}
+
+        it 'extracts season number' do
+          expect(subject.season).to eq 2
+        end
+
+        it 'extracts first episode number' do
+          expect(subject.episode).to eq 1
+        end
+
+
+      end
+
       context "that has a series name in dot-format" do
 
         let(:file) { "file/path/Goodbye.Hello.Hamburger.2008.S02E01.mp4"}
@@ -125,6 +140,14 @@ module Torganiser
           expect(subject.episode).to eq 0
         end
 
+        context "with a season specified" do
+          let(:file) { "file/path/Hello.2014.s01.special.hdtv-lol.mp4" }
+
+          it 'extracts season number' do
+            expect(subject.season).to eq 1
+          end
+
+        end
       end
 
     end
