@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = [""]
   spec.summary       = %q{Organises episode files according to filename.}
   spec.description   = %q{Organises episode files according to filename.}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/sergei-matheson/torganiser"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
