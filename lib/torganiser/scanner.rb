@@ -2,7 +2,6 @@ module Torganiser
   # Handles scanning a set of directories and files
   # and returning any found episode files.
   class Scanner
-
     include Enumerable
 
     def initialize(files, extensions, ignored)
@@ -26,11 +25,11 @@ module Torganiser
       end
     end
 
-    def ignored? file
+    def ignored?(file)
       @ignored_patterns.any? { |pattern| pattern.match file }
     end
 
-    def ignore ignored
+    def ignore(ignored)
       ignored_patterns.concat([*ignored])
     end
 
@@ -46,13 +45,13 @@ module Torganiser
       end
     end
 
-    def add_files files
+    def add_files(files)
       files.each do |file|
         add_file file
       end
     end
 
-    def add_file file
+    def add_file(file)
       if File.file?(file)
         ordinary_files << file
       else
@@ -67,6 +66,5 @@ module Torganiser
     def file_query
       @file_query ||= FileQuery.new
     end
-
   end
 end

@@ -1,4 +1,4 @@
-require "codeclimate-test-reporter"
+require 'codeclimate-test-reporter'
 CodeClimate::TestReporter.start
 # At the top because simplecov needs to watch files being loaded
 require 'simplecov'

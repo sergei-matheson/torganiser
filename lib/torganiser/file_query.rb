@@ -4,7 +4,6 @@ module Torganiser
   # The 'pattern' method returns a Dir.glob style pattern
   # that can be used to match a set of files.
   class FileQuery
-
     attr_reader :directories, :extensions
 
     def initialize(directories: nil, extensions: nil)
@@ -18,16 +17,16 @@ module Torganiser
       @directories.empty?
     end
 
-    def add_extension extensions
+    def add_extension(extensions)
       @extensions.concat([*extensions])
     end
 
-    def add_directory directories
+    def add_directory(directories)
       @directories.concat([*directories])
     end
 
     def pattern
-      directory_pattern + "/**/" + extension_pattern
+      directory_pattern + '/**/' + extension_pattern
     end
 
     private
@@ -37,23 +36,20 @@ module Torganiser
     end
 
     def extension_pattern
-      "*" + (extensions.count > 0 ? ItemsPattern.new(extensions).to_s : '')
+      '*' + (extensions.count > 0 ? ItemsPattern.new(extensions).to_s : '')
     end
 
     # Models a pattern that matchers a series of one or more string items.
     class ItemsPattern
-
       attr_reader :items
 
-      def initialize items
+      def initialize(items)
         @items = items
       end
 
       def to_s
         items.count > 1 ?  "{#{items.join(',')}}" : items.first
       end
-
     end
-
   end
 end

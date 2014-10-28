@@ -2,7 +2,6 @@ module Torganiser
   # Runs the organisation process for a given array of
   # files, extensions, and ignored files
   class Runner
-
     def initialize(
       collection, files: [], extensions: [], ignored: [], dry_run: false
     )
@@ -20,10 +19,9 @@ module Torganiser
     end
 
     private
-    def arrange episode_file
+
+    def arrange(episode_file)
       @arranger.arrange episode_file
     end
-
   end
-
 end

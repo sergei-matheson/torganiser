@@ -3,25 +3,24 @@ require 'fileutils'
 module Torganiser
   # Handles arranging episode files into a collection
   class Arranger
-
     attr_reader :collection, :dry_run
 
-    def initialize collection, dry_run: false
+    def initialize(collection, dry_run: false)
       @collection = collection
       @dry_run = dry_run
     end
 
-    def arrange file
+    def arrange(file)
       episode = EpisodeFile.new(file)
       move(episode, Destination.new(collection, episode))
     end
 
     private
 
-    def move episode, destination
+    def move(episode, destination)
       directory = destination.directory
 
-      file_utils.mkdir_p directory unless File.exists? directory
+      file_utils.mkdir_p directory unless File.exist? directory
       file_utils.mv episode.file, directory
     end
 
@@ -31,10 +30,9 @@ module Torganiser
 
     # Models a destination for an episode file in a collection
     class Destination
-
       attr_reader :collection, :episode_file
 
-      def initialize collection, episode_file
+      def initialize(collection, episode_file)
         @collection = collection
         @episode_file = episode_file
       end
@@ -44,6 +42,7 @@ module Torganiser
       end
 
       private
+
       def season_dir
         "Season #{episode_file.season}"
       end
@@ -55,7 +54,6 @@ module Torganiser
       def series
         episode_file.series
       end
-
     end
   end
 end

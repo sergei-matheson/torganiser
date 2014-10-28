@@ -2,7 +2,6 @@ module Torganiser
   # Models a file that contains a single episode of a TV series.
   # Attempts to extract episode data, based on the filename.
   class EpisodeFile
-
     attr_reader :file
 
     def initialize(file)
@@ -23,7 +22,8 @@ module Torganiser
 
     def series
       @series ||= begin
-        year = year.to_i if year = episode_info[:year]
+        year = episode_info[:year]
+        year = year.to_i if year
         Series.new(series_name, year: year)
       end
     end
@@ -35,7 +35,7 @@ module Torganiser
     end
 
     def episode_info
-      @episode_info ||= Matcher.match(basename) or raise(
+      @episode_info ||= Matcher.match(basename) || fail(
         "Unable to parse #{file}"
       )
     end
@@ -66,17 +66,15 @@ module Torganiser
       # Series without year takes precedence
       series = "(#{series_with_year}|#{series_without_year})"
 
-      PATTERN  = %r{^
+      PATTERN  = /^
         #{series}                  # Series name, and possibly year
         #{separator}#{season_info} # season info
         #{separator}.*$            # stuff we don't care about
-      }ix
+      /ix
 
-      def self.match basename
+      def self.match(basename)
         PATTERN.match basename
       end
-
     end
-
   end
 end
