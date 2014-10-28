@@ -1,6 +1,7 @@
 require "bundler/gem_tasks"
 require "rspec/core/rake_task"
 require 'reek/rake/task'
+require 'rubocop/rake_task'
 
 Reek::Rake::Task.new
 
@@ -19,4 +20,8 @@ end
 
 RSpec::Core::RakeTask.new(:spec)
 
-task :default => [ :spec, :quality, :reek ]
+RuboCop::RakeTask.new(:rubocop) do |task|
+  task.patterns = ['lib/**/*.rb', "spec/**/*.rb"]
+end
+
+task :default => [ :spec, :quality, :reek, :rubocop ]
