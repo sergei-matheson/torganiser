@@ -1,38 +1,63 @@
 module Torganiser
   # A matcher that can extract semantic information from a
   # properly named file.
-  module Matcher
-    separator = '(\.|\s|\s?\-\s?)'
+  class Matcher
+    class << self
+      def match(basename)
+        pattern.match basename
+      end
 
-    long_format = [
-      's(?<season>\d+)', # season number
-      'e(?<episode>\d+)', # episode number
-      '(e\d+)?' # optional second episode number, ignored
-    ].join('\s?') # optionally space separated
+      private
 
-    # season number and episode number together, optionally with an 'x'
-    short_format = '\[?(?<season>\d+)x?(?<episode>\d{2})\]?'
+      def pattern
+        @pattern ||= /^
+          #{series}                  # Series name, and possibly year
+          #{separator}#{season_info} # season info
+          #{separator}.*$            # stuff we don't care about
+        /ix
+      end
 
-    # specials don't fit nicely into the season/episode model.
-    special = "s(?<season>0)0|s(?<season>\\d+)#{separator}special"
+      def separator
+        @separator ||= one_of '\.', '\s', '\s?\-\s?'
+      end
 
-    season_info = "(#{long_format}|#{short_format}|#{special})"
+      def series
+        # Series with year takes precedence
+        one_of series_with_year, series_without_year
+      end
 
-    # Series name, and possibly year
-    series_with_year = '(?<name>.*)\.(?<year>\d{4})'
-    series_without_year = '(?<name>.*)'
+      def series_without_year
+        '(?<name>.*)'
+      end
 
-    # Series without year takes precedence
-    series = "(#{series_with_year}|#{series_without_year})"
+      def series_with_year
+        '(?<name>.*)\.(?<year>\d{4})'
+      end
 
-    PATTERN  = /^
-      #{series}                  # Series name, and possibly year
-      #{separator}#{season_info} # season info
-      #{separator}.*$            # stuff we don't care about
-    /ix
+      def season_info
+        one_of long_format, short_format, special
+      end
 
-    def self.match(basename)
-      PATTERN.match basename
+      def long_format
+        [
+          's(?<season>\d+)',  # season number
+          'e(?<episode>\d+)', # episode number
+          '(e\d+)?'           # optional second episode number, ignored
+        ].join('\s?')         # optionally space separated
+      end
+
+      def short_format
+        '\[?(?<season>\d+)x?(?<episode>\d{2})\]?'
+      end
+
+      def special
+        # specials don't fit nicely into the season/episode model.
+        "s(?<season>0)0|s(?<season>\\d+)#{separator}special"
+      end
+
+      def one_of(*args)
+        MatchOne.new(args)
+      end
     end
   end
 end
