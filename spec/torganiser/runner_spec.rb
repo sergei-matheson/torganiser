@@ -4,46 +4,23 @@ require 'spec_helper'
 module Torganiser
   describe Runner do
 
-    context 'when initialised with a collection, files and extensions' do
-
-      let(:collection) { double('collection') }
-      let(:files) { double('files') }
-      let(:extensions) { double('extensions') }
-      let(:ignored) { [] }
+    context 'when initialised with a scanner and arranger' do
 
       subject do
         Runner.new(
-          collection,
-          files: files, extensions: extensions,
-          ignored: ignored, dry_run: true
+          scanner: scanner, arranger: arranger
         )
+      end
+
+      let(:arranger) do
+        instance_double('Torganiser::Arranger', arrange: nil)
       end
 
       let(:scanner) do
         instance_double('Torganiser::Scanner', each: nil)
       end
 
-      before do
-        allow(Scanner).to receive(:new).and_return scanner
-      end
-
-      describe 'a scanner' do
-
-        it 'is created for the files,  extensions, and ignored as regex' do
-          expect(Scanner).to receive(:new).with(
-            files, extensions, anything
-          )
-          subject.run
-        end
-
-        let(:ignored) { ['ignored', '.*stuff.*'] }
-
-        it 'is given the list of files to ignore converted to regex' do
-          expect(Scanner).to receive(:new).with(
-            anything, anything, [/ignored/, /.*stuff.*/]
-          )
-          subject.run
-        end
+      describe 'the scanner' do
 
         it 'is used to retrieve episode files' do
           expect(scanner).to receive(:each)
@@ -60,20 +37,7 @@ module Torganiser
           allow(scanner).to receive(:each).and_yield episode_file
         end
 
-        describe 'an arranger' do
-
-          let(:arranger) do
-            instance_double('Torganiser::Arranger', arrange: nil)
-          end
-
-          before do
-            allow(Arranger).to receive(:new).and_return arranger
-          end
-
-          it 'is created for the collection, and dry run status' do
-            expect(Arranger).to receive(:new).with(collection, dry_run: true)
-            subject.run
-          end
+        describe 'the arranger' do
 
           it 'is used to arrange episode files found by the scanner' do
             expect(arranger).to receive(:arrange).with(episode_file)

@@ -24,14 +24,24 @@ Clamp do
 
   option '--dry-run', :flag, 'If specified, no files will be moved'
 
+  option '--copy', :flag, 'If specified, files will be copied instead of moved'
+
   parameter 'FILES ...', 'Files or directories to organise',
             attribute_name: :files
 
+  def scanner
+    Torganiser::Scanner.new(
+      files, extensions,
+      ignore.map { |string| Regexp.new(string) }
+    )
+  end
+
+  def arranger
+    Torganiser::Arranger.new(collection, dry_run: dry_run?, copy: copy?)
+  end
+
   def execute
-    Torganiser::Runner.new(collection,
-                           files: files, extensions: extensions,
-                           ignored: ignore, dry_run: dry_run?
-                          ).run
+    Torganiser::Runner.new(scanner: scanner, arranger: arranger).run
   end
 
 end
