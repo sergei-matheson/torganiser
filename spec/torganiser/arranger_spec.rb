@@ -31,6 +31,23 @@ module Torganiser
           subject.arrange file
         end
 
+        context 'when set up to copy, rather than move' do
+
+          before do
+            allow(FileUtils).to receive(:cp)
+          end
+
+          subject { Arranger.new('/my/media', copy: true) }
+
+          it 'copies the file to the destination' do
+            expect(FileUtils).to receive(:cp).with(
+              file,
+              '/my/media/Waffle Cone (2007)/Season 1'
+            )
+            subject.arrange file
+          end
+        end
+
       end
     end
   end

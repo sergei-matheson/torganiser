@@ -3,25 +3,33 @@ require 'fileutils'
 module Torganiser
   # Handles arranging episode files into a collection
   class Arranger
-    attr_reader :collection, :dry_run
+    attr_reader :collection, :dry_run, :copy
 
-    def initialize(collection, dry_run: false)
+    def initialize(collection, dry_run: false, copy: false)
       @collection = collection
       @dry_run = dry_run
+      @copy = copy
     end
 
     def arrange(file)
       episode = EpisodeFile.new(file)
-      move(episode, Destination.new(collection, episode))
+      arrange_episode(episode)
     end
 
     private
 
-    def move(episode, destination)
-      directory = destination.directory
+    def arrange_episode(episode)
+      arrange_method.call episode.file, ensure_directory_for(episode)
+    end
 
-      file_utils.mkdir_p directory unless File.exist? directory
-      file_utils.mv episode.file, directory
+    def ensure_directory_for(episode)
+      Destination.new(collection, episode).directory.tap do |dir|
+        file_utils.mkdir_p dir unless File.exist? dir
+      end
+    end
+
+    def arrange_method
+      @arrange_method ||= file_utils.method(@copy ? :cp : :mv)
     end
 
     def file_utils
