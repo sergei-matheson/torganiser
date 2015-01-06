@@ -3,7 +3,9 @@ require 'rspec/core/rake_task'
 require 'reek/rake/task'
 require 'rubocop/rake_task'
 
-Reek::Rake::Task.new
+Reek::Rake::Task.new do |task|
+  task.config_file = './config.reek'
+end
 
 begin
   require 'cane/rake_task'

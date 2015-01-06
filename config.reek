@@ -1,0 +1,4 @@
+---
+BooleanParameter:
+  exclude:
+    - Torganiser::Arranger#initialize
