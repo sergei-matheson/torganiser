@@ -3,9 +3,7 @@ require 'spec_helper'
 # Main module
 module Torganiser
   describe Scanner do
-
     context 'when initialised with an array of files' do
-
       let(:files) { ['/tmp/file1', '/tmp/dir1', '/tmp/file2', '/tmp/dir2'] }
 
       let(:extensions) { double('extensions') }
@@ -49,7 +47,6 @@ module Torganiser
         end
 
         context 'when enumerating' do
-
           context 'when given some directories' do
             it 'is used do a directory search' do
               expect(Dir).to receive(:[]).with query_pattern
@@ -58,7 +55,6 @@ module Torganiser
           end
 
           context 'when empty' do
-
             let(:files) { ['/tmp/file1''/tmp/file2'] }
 
             let(:file_query) do
@@ -74,7 +70,6 @@ module Torganiser
               subject.each { |_| }
             end
           end
-
         end
       end
 
@@ -108,7 +103,6 @@ module Torganiser
           )
         end
       end
-
     end
   end
 end

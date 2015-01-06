@@ -3,7 +3,6 @@ require 'spec_helper'
 # Main module
 module Torganiser
   describe EpisodeFile do
-
     subject { EpisodeFile.new(file) }
 
     let(:match) do
@@ -21,7 +20,6 @@ module Torganiser
     end
 
     context 'when initialized with a filename' do
-
       it 'extracts the base file name' do
         expect(subject.basename).to eq 'Hello.S02E01.mp4'
       end
@@ -53,11 +51,9 @@ module Torganiser
           )
           subject.series
         end
-
       end
 
       context 'that has a series name in dot-format' do
-
         let(:match) do
           {
             name: 'Goodbye.Hello.Hamburger'
@@ -71,11 +67,9 @@ module Torganiser
           )
           subject.series
         end
-
       end
 
       context 'that is dash-separated' do
-
         let(:match) do
           {
             name: "Wiffle's Berry - "
@@ -88,20 +82,15 @@ module Torganiser
           )
           subject.series
         end
-
       end
-
     end
 
     context 'when initialised with a file whose name cannot be parsed' do
-
       let(:match) { nil }
 
       it 'blows up in a more helpful manner' do
         expect { subject.series }.to raise_error(/Unable to parse #{file}/)
       end
-
     end
-
   end
 end

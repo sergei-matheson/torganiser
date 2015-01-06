@@ -3,12 +3,10 @@ require 'spec_helper'
 # Main module
 module Torganiser
   describe Arranger do
-
     describe 'for a collection' do
       subject { Arranger.new('/my/media') }
 
       context 'when arranging a file' do
-
         before do
           allow(FileUtils).to receive(:mkdir_p)
           allow(FileUtils).to receive(:mv)
@@ -32,7 +30,6 @@ module Torganiser
         end
 
         context 'when set up to copy, rather than move' do
-
           before do
             allow(FileUtils).to receive(:cp)
           end
@@ -47,7 +44,6 @@ module Torganiser
             subject.arrange file
           end
         end
-
       end
     end
   end
