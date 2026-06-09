@@ -2,7 +2,7 @@ module Torganiser
   # Runs the organisation process for a given array of
   # files, extensions, and ignored files
   class Runner
-    def initialize(scanner: scanner, arranger: arranger)
+    def initialize(scanner:, arranger:)
       @scanner = scanner
       @arranger = arranger
     end
